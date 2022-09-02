@@ -3,7 +3,7 @@ const {Member} = require("../models");
 const {discordAdminRoleId} = require('../config.json');
 const { Op } = require("sequelize");
 
-function validateParameters(interactino, user, expiration) {
+function validateParameters(interaction, user, expiration) {
     if (!user) {
         interaction.reply({content: 'Invalid user selected', ephemeral: true});
         return false;
@@ -52,6 +52,18 @@ async function giveVip(interaction) {
     await memberModel.save();
 
     return interaction.reply({content: 'Give vip', ephemeral: true});
+}
+
+async function showVip(interaction) {
+    const user = interaction.options.getUser('user');
+
+    let memberModel = await Member.findOne({where: {discordId: user.id}});
+
+    if (memberModel) {
+        return interaction.reply({content: JSON.stringify(memberModel), ephemeral: true});
+    } else {
+        return interaction.reply({content: 'User not found', ephemeral: true});
+    }
 }
 
 async function removeVip(interaction) {
@@ -114,6 +126,12 @@ module.exports = {
         )
         .addSubcommand(subcommand =>
             subcommand
+                .setName('show')
+                .setDescription('show vip')
+				.addUserOption((option) =>option.setName('user').setDescription('User').setRequired(true))                
+        ),
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName('remove')
                 .setDescription('Remove vip')
 				.addUserOption((option) =>option.setName('user').setDescription('User').setRequired(true))                
@@ -129,6 +147,9 @@ module.exports = {
                 return await giveVip(interaction);
             case 'remove':
                 return await removeVip(interaction);
+            case 'show':
+                return await showVip(interaction);
+    
             case 'list':
                 return await listVips(interaction);
         }
