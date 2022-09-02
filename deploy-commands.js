@@ -13,7 +13,6 @@ for (const file of commandFiles) {
     const command = require(filePath);
     commands.push(command.data.toJSON());
 }
-
 const rest = new REST({ version: '10' }).setToken(token);
 
 rest.put(Routes.applicationCommands(clientId), { body: commands })
