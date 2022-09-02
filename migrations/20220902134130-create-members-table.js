@@ -9,9 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       discordId: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER,
         unique: true
+      },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: true
       },
       steamId: {
         allowNull: false,

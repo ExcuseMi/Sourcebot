@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING
         },
         discordId: DataTypes.INTEGER,
+        name: DataTypes.STRING,
         steamId: DataTypes.STRING,
         vipStart: DataTypes.DATE,
         vipEnd: DataTypes.DATE

@@ -41,6 +41,7 @@ async function giveVip(interaction) {
         if (steamid) {
             memberModel.steamId = steamid
         }
+        memberModel.name = user.username
         memberModel.vipStart = new Date();
         memberModel.vipEnd = getExpirationDate(expiration);
         await memberModel.save();
@@ -48,7 +49,7 @@ async function giveVip(interaction) {
         return interaction.reply({content: 'Give vip', ephemeral: true});
     }
 
-    memberModel = Member.build({discordId: user.id, steamId: steamid, vipStart: new Date(), vipEnd:  getExpirationDate(expiration)});
+    memberModel = Member.build({discordId: user.id, name : user.username, steamId: steamid, vipStart: new Date(), vipEnd:  getExpirationDate(expiration)});
     await memberModel.save();
 
     return interaction.reply({content: 'Give vip', ephemeral: true});
@@ -129,7 +130,7 @@ module.exports = {
                 .setName('show')
                 .setDescription('show vip')
 				.addUserOption((option) =>option.setName('user').setDescription('User').setRequired(true))                
-        ),
+        )
         .addSubcommand(subcommand =>
             subcommand
                 .setName('remove')
